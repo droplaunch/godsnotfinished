@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>God's Not Finished</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #0d0d0d;
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 20px 0;
+      font-weight: normal;
+    }
+
+    .promo {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .promo img {
+      width: 300px;
+      border-radius: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .promo img:hover {
+      transform: scale(1.05);
+    }
+
+    .listen-section {
+      margin-top: 40px;
+    }
+
+    .album-image-wrapper {
+      position: relative;
+      width: 320px;
+      margin: 0 auto;
+      cursor: pointer;
+    }
+
+    .album-image {
+      width: 100%;
+      border-radius: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .album-image-wrapper:hover .album-image {
+      transform: scale(1.02);
+    }
+
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 64px;
+      color: rgba(255, 255, 255, 0.8);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .album-image-wrapper:hover .play-icon {
+      opacity: 1;
+    }
+
+    .player-embed {
+      margin-top: 20px;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .player-embed.visible {
+      display: block;
+      opacity: 1;
+    }
+
+    .merch {
+      margin-top: 60px;
+    }
+
+    .merch-item {
+      margin: 10px 0;
+      font-size: 1.2em;
+    }
+
+    .timers {
+      margin-top: 50px;
+    }
+
+    .timer {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>God's Not Finished</h1>
+  <h2>A 3-part album series. A journey. A statement.</h2>
+
+  <div class="promo">
+    <img src="promo1.jpg" alt="Promo 1"/>
+    <img src="promo2.jpg" alt="Promo 2"/>
+  </div>
+
+  <div class="listen-section">
+    <h2>Listen Here</h2>
+    <div class="album-image-wrapper" onclick="togglePlayer()">
+      <img src="album.jpg" alt="Album Cover" class="album-image" />
+      <div class="play-icon">▶️</div>
+    </div>
+    <div id="player" class="player-embed">
+      <iframe style="border-radius: 24px" src="https://untitled.stream/embed/sUA3HZovSJwc" width="100%" height="344" allowfullscreen allow="picture-in-picture" frameborder="0" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <div class="merch">
+    <h2>Limited Merch Drop</h2>
+    <div class="merch-item">🧥 Gods Not Finished Hoodie – AED 120</div>
+    <div class="merch-item">🧥 Gods Not Finished Jacket – AED 180</div>
+    <p>Only available until Vol 3 drops!</p>
+  </div>
+
+  <div class="timers">
+    <h2>Next Volume Drops In</h2>
+    <div class="timer" id="timer1">Vol 1 – July 24</div>
+    <div class="timer" id="timer2">Vol 2 – July 26</div>
+    <div class="timer" id="timer3">Vol 3 – July 28</div>
+  </div>
+
+  <script>
+    function togglePlayer() {
+      const player = document.getElementById('player');
+      player.classList.add('visible');
+    }
+
+    function updateTimers() {
+      const countdowns = [
+        { id: 'timer1', date: new Date('2025-07-24T00:00:00') },
+        { id: 'timer2', date: new Date('2025-07-26T00:00:00') },
+        { id: 'timer3', date: new Date('2025-07-28T00:00:00') }
+      ];
+
+      countdowns.forEach(c => {
+        const now = new Date();
+        const diff = c.date - now;
+
+        if (diff <= 0) {
+          document.getElementById(c.id).textContent = `${c.id.toUpperCase()} – Out Now!`;
+        } else {
+          const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+          const mins = Math.floor((diff / (1000 * 60)) % 60);
+          const secs = Math.floor((diff / 1000) % 60);
+          document.getElementById(c.id).textContent = `${c.id.replace('timer', 'Vol')} – ${days}d ${hours}h ${mins}m ${secs}s`;
+        }
+      });
+    }
+
+    setInterval(updateTimers, 1000);
+    updateTimers();
+  </script>
+
+</body>
+</html>
