@@ -1,99 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Coming Soon – God's Not Finished</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>God's Not Finished - EP Stream</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
-      background: #181818;
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
       margin: 0;
       padding: 0;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 12px;
-      color: #e6e6e6;
-      text-align: center;
-    }
-    .subtitle {
-      font-size: 1.2rem;
-      color: #a0a0a0;
-      margin-bottom: 32px;
-      text-align: center;
-    }
-    .timer-section {
-      background: #222;
-      padding: 24px 32px;
-      border-radius: 16px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.08);
-      margin-bottom: 24px;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-    }
-    .timer {
-      font-size: 1.1rem;
-      margin: 16px 0;
-      background: #1c1c1c;
-      padding: 12px;
-      border-radius: 10px;
-      color: #fff;
-    }
-    .soon-msg {
-      font-size: 1.3rem;
-      margin-bottom: 24px;
-      color: #ffd700;
-      text-align: center;
-    }
-    a {
-      color: #ffd700;
-      text-decoration: underline;
-      font-size: 1rem;
-    }
-  </style>
-  <script>
-    function countdown(id, targetDate) {
-      const element = document.getElementById(id);
-      function updateCountdown() {
-        const now = new Date();
-        const distance = targetDate - now;
-        if (distance <= 0) {
-          element.innerHTML = "Now Available!";
-          return;
-        }
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        element.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-      }
-      setInterval(updateCountdown, 1000);
-      updateCountdown();
+      font-family: 'Courier New', monospace;
+      background: black;
+      color: white;
+      overflow: hidden;
     }
 
-    window.onload = function () {
-      // Dubai is UTC+4, so set time accordingly
-      countdown("vol1", new Date(Date.UTC(2025, 6, 24, 12, 0, 0))); // July is month 6 (0-based), 12:00 UTC = 16:00 Dubai
-      countdown("vol2", new Date(Date.UTC(2025, 6, 26, 0, 0, 0))); // Midnight UTC
-      countdown("vol3", new Date(Date.UTC(2025, 6, 28, 0, 0, 0))); // Midnight UTC
-    };
-  </script>
+    .intro-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10000;
+      animation: fadeOut 2s ease 4s forwards;
+    }
+
+    .static-noise {
+      width: 100vw;
+      height: 100vh;
+      background: url('https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif') center center / cover no-repeat;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      opacity: 0.3;
+    }
+
+    .intro-text {
+      font-size: 2rem;
+      color: white;
+      text-shadow: 0 0 10px #ff0040;
+      z-index: 10001;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+
+    .music-player {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .album-cover {
+      width: 350px;
+      height: 350px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+    }
+
+    .album-cover:hover {
+      transform: scale(1.05);
+    }
+
+    .fullscreen-player {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.97);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9998;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .fullscreen-player iframe {
+      width: 90%;
+      height: 80%;
+      border-radius: 16px;
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+    }
+
+    #closePlayer {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: #fff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 10000;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    .timestamp {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      color: #00ffcc;
+      font-size: 1rem;
+      font-family: monospace;
+      z-index: 9999;
+      text-shadow: 0 0 5px #00ffcc;
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Coming Soon</h1>
-  <div class="subtitle">God's Not Finished – Album</div>
-  <div class="soon-msg">🚧 The album and merch are coming soon. Stay tuned!</div>
-  <div class="timer-section">
-    <div class="timer">Vol. 1 drops in: <span id="vol1"></span></div>
-    <div class="timer">Vol. 2 drops in: <span id="vol2"></span></div>
-    <div class="timer">Vol. 3 drops in: <span id="vol3"></span></div>
+  <div class="intro-container" id="intro">
+    <div class="static-noise"></div>
+    <div class="intro-text">God's Not Finished</div>
   </div>
-  <a href="index.html">Back to
+
+  <div class="music-player">
+    <img src="COVER.png" alt="Album Cover" class="album-cover" onclick="togglePlayer()">
+
+    <div class="fullscreen-player" id="albumPlayerOverlay">
+      <button id="closePlayer" onclick="togglePlayer()">✕</button>
+     
+<iframe style="border-radius: 24px" src="https://untitled.stream/embed/z11MWngjroY3" width="100%" height="344" allowFullScreen="" allow="picture-in-picture" frameborder="0" loading="lazy"></iframe>
+    </div>
+  </div>
+
+  <div class="timestamp" id="timestamp"></div>
+
+  <script>
+    // Auto remove intro after 4s
+    setTimeout(() => {
+      document.getElementById('intro').style.display = 'none';
+    }, 5000);
+
+    function togglePlayer() {
+      const overlay = document.getElementById('albumPlayerOverlay');
+      overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function updateTimestamp() {
+      const now = new Date();
+      const timestamp = now.toLocaleDateString('en-GB') + ' ' + now.toLocaleTimeString('en-GB');
+      document.getElementById('timestamp').innerText = timestamp;
+    }
+
+    setInterval(updateTimestamp, 1000);
+    updateTimestamp();
+  </script>
+</body>
+
+</html>
