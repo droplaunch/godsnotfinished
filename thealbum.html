@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>God's Not Finished Volume 1</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      font-family: 'Courier New', Courier, monospace;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .container {
+      position: relative;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    .album-image {
+      width: 300px;
+      border: 12px solid #333;
+      border-radius: 20px;
+      transition: all 0.4s ease-in-out;
+      filter: brightness(0.9);
+      box-shadow: 0 0 20px #222;
+    }
+
+    .album-image:hover {
+      filter: brightness(1.2);
+      transform: scale(1.05);
+    }
+
+    .play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 100px;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .image-wrapper:hover .play-icon {
+      opacity: 0.8;
+    }
+
+    .image-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .tv-frame {
+      width: 640px;
+      height: 360px;
+      margin: 40px auto;
+      padding: 15px;
+      border: 18px solid #222;
+      border-radius: 18px;
+      background: #111;
+      box-shadow: 0 0 60px rgba(255,255,255,0.1);
+      animation: shake 0.8s ease-in-out;
+      position: relative;
+    }
+
+    .scanlines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.05) 0px,
+        rgba(255,255,255,0.05) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      z-index: 2;
+    }
+
+    .vhs-timestamp {
+      position: absolute;
+      top: 10px;
+      left: 15px;
+      color: white;
+      font-size: 14px;
+      opacity: 0.7;
+      text-shadow: 0 0 2px white;
+      font-family: 'Courier New', Courier, monospace;
+      z-index: 3;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(2px, -2px); }
+      50% { transform: translate(-2px, 2px); }
+      75% { transform: translate(1px, -1px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes flicker {
+      0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        opacity: 1;
+      }
+      20%, 22%, 24%, 55% {
+        opacity: 0.4;
+      }
+    }
+
+    #static {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('static.gif') center center / cover no-repeat;
+      z-index: 10;
+      animation: flicker 1.5s ease-out;
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 2s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        filter: blur(10px);
+      }
+      100% {
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>God's Not Finished Volume 1</h1>
+    <p>Listen to the full experience</p>
+    <div class="image-wrapper" onclick="playAlbum()">
+      <img class="album-image" src="images/COVER.png" alt="Album Cover">
+      <div class="play-icon">▶</div>
+    </div>
+
+    <div id="player-section" style="display:none;">
+      <div class="tv-frame">
+        <div class="scanlines"></div>
+        <div class="vhs-timestamp">PLAY 00:00:01  JUL 21 1995</div>
+        <div id="static"></div>
+        <div class="iframe-wrapper">
+          <iframe style="border-radius: 24px" src="https://untitled.stream/embed/sUA3HZovSJwc" width="100%" height="344" allowFullScreen allow="picture-in-picture" frameborder="0" loading="lazy"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="glitch" src="glitch.mp3"></audio>
+  <audio id="speech" src="speech.mp3"></audio>
+
+  <script>
+    function playAlbum() {
+      document.getElementById("player-section").style.display = "block";
+      document.getElementById("glitch").play();
+      document.getElementById("speech").play();
+
+      const staticScreen = document.getElementById("static");
+      setTimeout(() => {
+        staticScreen.style.display = 'none';
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

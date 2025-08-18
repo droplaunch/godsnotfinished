@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>God's Not Finished – Album</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #0d0d0d;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #e6e6e6;
+    }
+
+    p.subtitle {
+      font-size: 1.2rem;
+      color: #a0a0a0;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .player-wrapper, .merch, .promo-imgs, .timer-section, .coming-soon {
+      width: 100%;
+      max-width: 720px;
+      margin-bottom: 40px;
+    }
+
+    .player-wrapper iframe {
+      width: 100%;
+      height: 344px;
+      border-radius: 24px;
+      border: none;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.08);
+    }
+
+    .music-player {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .album-cover {
+      width: 100%;
+      max-width: 300px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .album-cover:hover {
+      transform: scale(1.05);
+    }
+
+    .promo-imgs img {
+      width: 100%;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+
+    .merch h2 {
+      margin-bottom: 12px;
+    }
+
+    .merch-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .merch-items a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .merch-items img {
+      width: 100%;
+      border-radius: 12px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      cursor: pointer;
+    }
+
+    .merch-items img:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    .timer-section h2 {
+      margin-bottom: 16px;
+    }
+
+    .timers {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .timer {
+      background: #1c1c1c;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      text-align: center;
+    }
+
+    .hidden-iframe {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .coming-soon {
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #777;
+      text-align: center;
+    }
+
+    .promo-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .promo-gallery img {
+      width: 100%;
+      border-radius: 12px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      cursor: pointer;
+    }
+
+    .promo-gallery img:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+
+    /* Slideshow styles */
+    .slideshow-container {
+      position: relative;
+      max-width: 100%;
+      margin: auto;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .slideshow-img {
+      width: 100%;
+      display: none;
+    }
+
+    .slide-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #333;
+      transition: background-color 0.3s ease;
+    }
+
+    .slide-btn:hover {
+      background-color: rgba(255, 255, 255, 1);
+    }
+
+    .prev {
+      left: 10px;
+    }
+
+    .next {
+      right: 10px;
+    }
+
+    .merch-slideshow-img {
+      width: 100%;
+      border-radius: 12px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      cursor: pointer;
+    }
+
+    .merch-slideshow-img:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
+  </style>
+  <script>
+    function countdown(id, targetDate) {
+      const element = document.getElementById(id);
+      function updateCountdown() {
+        const now = new Date();
+        const distance = targetDate - now;
+        if (distance <= 0) {
+          element.innerHTML = "Now Available!";
+          return;
+        }
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        element.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+    }
+
+    function togglePlayer() {
+      const player = document.getElementById('albumIframe');
+      player.style.display = player.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Slideshow functionality
+    let slideIndex = 0;
+    let slides = [];
+    let slideInterval;
+
+    function showSlide(index) {
+      const promoSlide = document.getElementById("promoSlide");
+      promoSlide.src = slides[index];
+      promoSlide.style.display = "block";
+    }
+
+    function nextSlide() {
+      slideIndex = (slideIndex + 1) % slides.length;
+      updateSlides();
+    }
+
+    function prevSlide() {
+      slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+      updateSlides();
+    }
+
+    function updateSlides() {
+      const promoSlide = document.getElementById("promoSlide");
+      promoSlide.style.display = "none";
+      setTimeout(() => showSlide(slideIndex), 100);
+    }
+
+    // Merch slideshow functionality
+    const merchSlides = [
+      {
+        src: "images/mamashouse.png",
+        alt: "Hoodie",
+        caption: "Mama's House Hoodie"
+      },
+      {
+        src: "images/worldoffire.png", // fixed path
+        alt: "Hoodie 2",
+        caption: "World On Fire Hoodie"
+      },
+      {
+        src: "images/godsdiscuss.png",
+        alt: "Sweatshirt",
+        caption: "God's Discuss Sweatshirt"
+      },
+      {
+        src: "images/houseonfire.png",
+        alt: "Sweatshirt 2",
+        caption: "House On Fire Sweatshirt"
+      }
+    ];
+    let merchSlideIndex = 0;
+
+    function showMerchSlide(index) {
+      if (index < 0) index = merchSlides.length - 1;
+      if (index >= merchSlides.length) index = 0;
+      merchSlideIndex = index;
+      const merchImg = document.getElementById('merchSlide');
+      const merchCaption = document.getElementById('merchCaption');
+      merchImg.src = merchSlides[merchSlideIndex].src;
+      merchImg.alt = merchSlides[merchSlideIndex].alt;
+      merchCaption.textContent = merchSlides[merchSlideIndex].caption;
+    }
+
+    function prevMerchSlide() {
+      showMerchSlide(merchSlideIndex - 1);
+    }
+
+    function nextMerchSlide() {
+      showMerchSlide(merchSlideIndex + 1);
+    }
+
+    window.onload = function () {
+      countdown("vol1", new Date("2025-07-24T00:00:00"));
+      countdown("vol2", new Date("2025-07-26T00:00:00"));
+      countdown("vol3", new Date("2025-07-28T00:00:00"));
+
+      // Initialize slideshow
+      slides = [
+        "images/walkintofire.jpg",
+        "images/promo1.png",
+        "images/promo2.png",
+        "images/gods.png"
+        // Add more images as needed
+      ];
+      showSlide(slideIndex);
+      slideInterval = setInterval(nextSlide, 5000); // Change slide every 5 seconds
+
+      // Merch slideshow init
+      showMerchSlide(0);
+    };
+  </script>
+</head>
+<body>
+  <h1>God's Not Finished</h1>
+  <p class="subtitle">A Kanye West Album</p>
+  <p class="subtitle">Executive Produced by Ez¥ErRor(Gokul Shenoy)</p>
+  <div class="music-player">
+    <h2>Listen Here</h2>
+    <a href="thealbum.html"><img src="images/newcover.png" alt="Album Cover" class="album-cover" onclick="togglePlayer()"></a>
+        <a href="thealbum2.html"><img src="images/volume2.png" alt="Album Cover" class="album-cover" onclick="togglePlayer()"></a>
+  </div>
+
+
+  <div class="promo-imgs">
+    <h2>Promotional Art</h2>
+    <div class="slideshow-container">
+      <img id="promoSlide" src="images/walkintofire.jpg" alt="Promo Image" class="slideshow-img">
+      <button class="slide-btn prev" onclick="prevSlide()">&#10094;</button>
+      <button class="slide-btn next" onclick="nextSlide()">&#10095;</button>
+    </div>
+  </div>
+
+  <div class="merch">
+    <h2>Limited Merch Drop</h2>
+    <div class="merch-slideshow-container">
+      <img id="merchSlide" src="images/mamashouse.png" alt="Hoodie" class="merch-slideshow-img" onclick="location.href='#comingSoon'">
+      <button class="merch-slide-btn merch-prev" onclick="prevMerchSlide()">&#10094;</button>
+      <button class="merch-slide-btn merch-next" onclick="nextMerchSlide()">&#10095;</button>
+      <div id="merchCaption" class="merch-caption">Mama's House Hoodie</div>
+    </div>
+  </div>
+  <div id="comingSoon" class="coming-soon">
+    <p>🚧 Merch coming soon. Stay tuned!</p>
+  </div>
+  <div class="timer-section">
+    <h2>Time Until the Next Volumes</h2>
+    <div class="timers">
+      <div class="timer">Vol. 1 drops in: <span id="vol1"></span></div>
+      <div class="timer">Vol. 2 drops in: <span id="vol2"></span></div>
+      <div class="timer">Vol. 3 drops in: <span id="vol3"></span></div>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 The Digital Error– All Rights Reserved.
+  </footer>
+</body>
+</html>
